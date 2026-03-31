@@ -6,4 +6,4 @@ CREATE TABLE products
 	created_at DATETIME,
 	price DECIMAL(20,2),
 	FOREIGN KEY (category_id) REFERENCES categories(category_id)
-)
+);

@@ -5,4 +5,4 @@ CREATE TABLE inventory
    stock_quantity INT,
    last_updated DATE,
    FOREIGN KEY(product_id) REFERENCES products(product_id)
-)
+);
