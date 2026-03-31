@@ -115,9 +115,7 @@ CREATE TABLE inventory
 
 ---
 
-## Entity Relationship Diagram
-
-![ER Diagram](ER_Diagram.png)
+You can see the entity relationship diagrams on ER_Diagrams folder to get a better understanding of the database structure.
 
 | Relationship | Type |
 |---|---|
