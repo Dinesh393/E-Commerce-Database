@@ -1,6 +1,6 @@
 CREATE TABLE inventory
 (
-   inventory_id INT PRIMARY KEY,
+   inventory_id INT IDENTITY(1,1) PRIMARY KEY,
    product_id INT,
    stock_quantity INT,
    last_updated DATE,

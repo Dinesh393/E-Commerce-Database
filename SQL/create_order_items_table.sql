@@ -1,6 +1,6 @@
 CREATE TABLE order_items
 (
-  order_item_id INT PRIMARY KEY,
+  order_item_id INT IDENTITY(1,1) PRIMARY KEY,
   product_id INT,
   order_id INT,
   price DECIMAL(10,2),

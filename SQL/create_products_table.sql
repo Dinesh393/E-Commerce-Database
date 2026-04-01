@@ -1,6 +1,6 @@
 CREATE TABLE products
 (
-    product_id INT PRIMARY KEY,
+    product_id INT IDENTITY(1,1) PRIMARY KEY,
 	product_name VARCHAR(50) NOT NULL,
 	category_id INT,
 	created_at DATETIME,

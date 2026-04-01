@@ -1,6 +1,6 @@
 CREATE TABLE customers
 (
-    customer_id INT PRIMARY KEY,
+    customer_id INT IDENTITY(1,1) PRIMARY KEY,
     name VARCHAR(50),
     email VARCHAR(30) NOT NULL,
     phone VARCHAR(20),
