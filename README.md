@@ -199,24 +199,28 @@ CREATE TABLE shipping
 ```text
 E-Commerce-Database/
 │
-├── create_database.sql
-├── create_categories_table.sql
-├── create_customers_table.sql
-├── create_products_table.sql
-├── create_orders_table.sql
-├── create_order_items_table.sql
-├── create_inventory_table.sql
-├── create_payments_table.sql
-├── create_shipping_table.sql
-├── create_reviews_table.sql
+├── sql/
+│   ├── create_database.sql
+│   ├── create_categories_table.sql
+│   ├── create_customers_table.sql
+│   ├── create_products_table.sql
+│   ├── create_orders_table.sql
+│   ├── create_order_items_table.sql
+│   ├── create_inventory_table.sql
+│   ├── create_payments_table.sql
+│   ├── create_shipping_table.sql
+│   ├── create_reviews_table.sql
+│   │
+│   ├── insert_data/
+│   │   ├── insert_categories.sql
+│   │   ├── insert_customers.sql
+│   │   ├── insert_products.sql
+│   │   ├── insert_orders.sql
+│   │   ├── insert_order_items.sql
+│   │   └── insert_inventory.sql
 │
-├── insert_data/
-│   ├── insert_categories.sql
-│   ├── insert_customers.sql
-│   ├── insert_products.sql
-│   ├── insert_orders.sql
-│   ├── insert_order_items.sql
-│   └── insert_inventory.sql
+├── scripts/
+│   └── generate_data.py
 │
 ├── ER_Diagram.png
 └── README.md
@@ -278,6 +282,39 @@ Sample data files include:
 - Sample dataset for testing SQL queries and analytics
 
 ---
+
+## Data Generation (Python Script)
+
+The sample data in `sql/insert_data/` was generated using Python with the **Faker** library to ensure realistic, synthetic data.
+
+### Why Use Generated Data?
+
+- **No real customer data** - All data is synthetic and safe for public repositories
+- **Consistent format** - Follows database schema constraints
+- **Realistic relationships** - Maintains referential integrity
+- **Edge cases included** - NULL values, various statuses, date ranges
+- **Reproducible** - Anyone can regenerate with different parameters
+
+### Regenerate Sample Data
+
+1. Install Faker:
+   ```bash
+   pip install faker
+
+### Steps to use the python script
+- Create a generate_data.py file in the main folder.
+- Paste the given code into the file and run it.
+- It will generate a file called **ecommerce_sample_data.sql**, where all the insert statements are included.
+- You can run those insert statements on sql server to insert the data into tables.
+- You can increase the volume of data by modifying the **generate_data.py**
+  ```generate_data.py
+    NUM_CATEGORIES = 10      # Number of categories
+    NUM_CUSTOMERS  = 100     # Number of customers
+    NUM_PRODUCTS   = 50      # Number of products
+    NUM_ORDERS     = 200     # Number of orders
+    NUM_REVIEWS    = 150     # Number of reviews
+  ```
+- Just change the numbers according to the volume of data you required and run it.
 
 ## Tools Used
 
