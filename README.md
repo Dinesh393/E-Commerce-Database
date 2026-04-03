@@ -115,6 +115,50 @@ CREATE TABLE inventory
 
 ---
 
+### `payments`
+Stores payment information for each order.
+```sql
+CREATE TABLE payments
+(
+    payment_id INT IDENTITY(1,1) PRIMARY KEY,
+    order_id INT,
+    payment_method VARCHAR(30),
+    payment_status VARCHAR(30),
+    payment_date DATE,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+```
+---
+### `reviews`
+Stores customer reviews and ratings for products.
+```sql
+CREATE TABLE reviews
+(
+    review_id INT IDENTITY(1,1) PRIMARY KEY,
+    customer_id INT,
+    product_id INT,
+    review_date DATE,
+    rating INT,
+    FOREIGN KEY (customer_id) REFERENCES customers(customer_id),
+    FOREIGN KEY (product_id) REFERENCES products(product_id)
+);
+```
+---
+### `shipping`
+Tracks shipping details and delivery status for each order.
+```sql
+CREATE TABLE shipping
+(
+    shipping_id INT IDENTITY(1,1) PRIMARY KEY,
+    order_id INT,
+    shipping_address VARCHAR(200),
+    shipped_date DATE,
+    delivered_date DATE,
+    shipping_status VARCHAR(30),
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+);
+```
+
 You can see the entity relationship diagrams on ER_Diagrams folder to get a better understanding of the database structure.
 
 | Relationship | Type |
@@ -124,7 +168,10 @@ You can see the entity relationship diagrams on ER_Diagrams folder to get a bett
 | `orders` → `order_items` | One-to-Many |
 | `products` → `order_items` | One-to-Many |
 | `products` → `inventory` | One-to-One |
-
+| `orders` → `payments` | One-to-One |
+| `customers` → `reviews` | One-to-Many |
+| `products` → `reviews` | One-to-Many |
+| `orders` → `shipping` | One-to-One |
 ---
 
 ## Key Design Decisions
@@ -146,6 +193,9 @@ E-Commerce-Database/
 ├── create_orders_table.sql
 ├── create_order_items_table.sql
 ├── create_inventory_table.sql
+├── create_payments_table.sql
+├── create_shipping_table.sql
+├── create_reviews_table.sql
 ├── ER_Diagram.png
 └── README.md
 ```
@@ -165,4 +215,7 @@ E-Commerce-Database/
 5. create_orders_table.sql
 6. create_order_items_table.sql
 7. create_inventory_table.sql
+8. create_payments_table.sql
+9. create_shipping_table.sql
+10. create_reviews_table.sql
 ```
