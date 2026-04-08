@@ -200,16 +200,17 @@ CREATE TABLE shipping
 E-Commerce-Database/
 │
 ├── sql/
-│   ├── create_database.sql
-│   ├── create_categories_table.sql
-│   ├── create_customers_table.sql
-│   ├── create_products_table.sql
-│   ├── create_orders_table.sql
-│   ├── create_order_items_table.sql
-│   ├── create_inventory_table.sql
-│   ├── create_payments_table.sql
-│   ├── create_shipping_table.sql
-│   ├── create_reviews_table.sql
+│   ├── create_tables/
+│   │   ├── create_database.sql
+│   │   ├── create_categories_table.sql
+│   │   ├── create_customers_table.sql
+│   │   ├── create_products_table.sql
+│   │   ├── create_orders_table.sql
+│   │   ├── create_order_items_table.sql
+│   │   ├── create_inventory_table.sql
+│   │   ├── create_payments_table.sql
+│   │   ├── create_shipping_table.sql
+│   │   └── create_reviews_table.sql
 │   │
 │   ├── insert_data/
 │   │   ├── insert_categories.sql
@@ -218,6 +219,9 @@ E-Commerce-Database/
 │   │   ├── insert_orders.sql
 │   │   ├── insert_order_items.sql
 │   │   └── insert_inventory.sql
+│   │
+│   └── analysis/
+│       └── basic_analysis.sql
 │
 ├── scripts/
 │   └── generate_data.py
