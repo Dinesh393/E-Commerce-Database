@@ -1,0 +1,29 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Customers</h2>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Joined</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer.0 }}</td>
+            <td>{{ customer.1 }}</td>
+            <td>{{ customer.2 }}</td>
+            <td>{{ customer.3 }}</td>
+            <td>{{ customer.4 }}</td>
+            <td>{{ customer.5 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

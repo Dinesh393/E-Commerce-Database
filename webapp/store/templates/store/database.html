@@ -1,0 +1,359 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<!-- Page Title -->
+<div class="text-center mb-5">
+    <h1 class="fw-bold">🗄️ Database Design</h1>
+    <p class="text-muted">E-Commerce Database — Built with Microsoft SQL Server</p>
+    <hr>
+</div>
+
+<!-- Section 1 — Overview -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white fw-bold">
+        📌 Database Overview
+    </div>
+    <div class="card-body">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white p-3">
+                    <h3>9</h3>
+                    <p>Total Tables</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white p-3">
+                    <h3>100+</h3>
+                    <p>Total Customers</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white p-3">
+                    <h3>50+</h3>
+                    <p>Total Products</p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-danger text-white p-3">
+                    <h3>200+</h3>
+                    <p>Total Orders</p>
+                </div>
+            </div>
+        </div>
+        <div class="mt-3">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Property</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Database Name</td><td>ECommerce</td></tr>
+                    <tr><td>Database Tool</td><td>Microsoft SQL Server</td></tr>
+                    <tr><td>Management Studio</td><td>SSMS (SQL Server Management Studio)</td></tr>
+                    <tr><td>Backend Framework</td><td>Python — Django</td></tr>
+                    <tr><td>DB Connector</td><td>pyodbc + mssql-django</td></tr>
+                    <tr><td>Total Tables</td><td>9</td></tr>
+                    <tr><td>Total Columns</td><td>43</td></tr>
+                    <tr><td>Primary Keys</td><td>9 (one per table)</td></tr>
+                    <tr><td>Foreign Keys</td><td>10</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Section 2 — ER Diagram -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white fw-bold">
+        📊 Entity Relationship Diagram
+    </div>
+    <div class="card-body text-center">
+        {% load static %}
+<img src="{% static 'images/ER_Diagram.png' %}"
+     alt="ER Diagram"
+     class="img-fluid rounded shadow"
+     style="max-width: 100%;">
+        <p class="text-muted mt-2">
+            ER Diagram showing all 9 tables and their relationships
+        </p>
+    </div>
+</div>
+
+<!-- Section 3 — Table Structure -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white fw-bold">
+        🏗️ Table Structure
+    </div>
+    <div class="card-body">
+
+        <!-- categories -->
+        <h5 class="fw-bold mt-2">1. categories</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>category_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>category_name</td><td>VARCHAR(60)</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- customers -->
+        <h5 class="fw-bold mt-3">2. customers</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>customer_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>name</td><td>VARCHAR(50)</td><td>—</td></tr>
+                <tr><td>email</td><td>VARCHAR(30)</td><td>NOT NULL</td></tr>
+                <tr><td>phone</td><td>VARCHAR(20)</td><td>—</td></tr>
+                <tr><td>address</td><td>VARCHAR(150)</td><td>—</td></tr>
+                <tr><td>created_at</td><td>DATETIME</td><td>—</td></tr>
+                <tr><td>password</td><td>VARCHAR(255)</td><td>—</td></tr>
+                <tr><td>role</td><td>VARCHAR(10)</td><td>DEFAULT 'user'</td></tr>
+            </tbody>
+        </table>
+
+        <!-- products -->
+        <h5 class="fw-bold mt-3">3. products</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>product_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>product_name</td><td>VARCHAR(50)</td><td>NOT NULL</td></tr>
+                <tr><td>category_id</td><td>INT</td><td>FOREIGN KEY → categories</td></tr>
+                <tr><td>created_at</td><td>DATETIME</td><td>—</td></tr>
+                <tr><td>price</td><td>DECIMAL(20,2)</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- orders -->
+        <h5 class="fw-bold mt-3">4. orders</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>order_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>customer_id</td><td>INT</td><td>FOREIGN KEY → customers</td></tr>
+                <tr><td>order_date</td><td>DATE</td><td>—</td></tr>
+                <tr><td>order_status</td><td>VARCHAR(50)</td><td>—</td></tr>
+                <tr><td>total_amount</td><td>DECIMAL(20,2)</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- order_items -->
+        <h5 class="fw-bold mt-3">5. order_items</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>order_item_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>product_id</td><td>INT</td><td>FOREIGN KEY → products</td></tr>
+                <tr><td>order_id</td><td>INT</td><td>FOREIGN KEY → orders</td></tr>
+                <tr><td>price</td><td>DECIMAL(10,2)</td><td>—</td></tr>
+                <tr><td>quantity</td><td>INT</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- inventory -->
+        <h5 class="fw-bold mt-3">6. inventory</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>inventory_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>product_id</td><td>INT</td><td>FOREIGN KEY → products</td></tr>
+                <tr><td>stock_quantity</td><td>INT</td><td>—</td></tr>
+                <tr><td>last_updated</td><td>DATE</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- payments -->
+        <h5 class="fw-bold mt-3">7. payments</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>payment_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>order_id</td><td>INT</td><td>FOREIGN KEY → orders</td></tr>
+                <tr><td>payment_method</td><td>VARCHAR(30)</td><td>—</td></tr>
+                <tr><td>payment_status</td><td>VARCHAR(30)</td><td>—</td></tr>
+                <tr><td>payment_date</td><td>DATE</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- reviews -->
+        <h5 class="fw-bold mt-3">8. reviews</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>review_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>customer_id</td><td>INT</td><td>FOREIGN KEY → customers</td></tr>
+                <tr><td>product_id</td><td>INT</td><td>FOREIGN KEY → products</td></tr>
+                <tr><td>review_date</td><td>DATE</td><td>—</td></tr>
+                <tr><td>rating</td><td>INT</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+        <!-- shipping -->
+        <h5 class="fw-bold mt-3">9. shipping</h5>
+        <table class="table table-bordered table-sm">
+            <thead class="table-secondary">
+                <tr><th>Column</th><th>Data Type</th><th>Constraint</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>shipping_id</td><td>INT</td><td>PRIMARY KEY, IDENTITY</td></tr>
+                <tr><td>order_id</td><td>INT</td><td>FOREIGN KEY → orders</td></tr>
+                <tr><td>shipping_address</td><td>VARCHAR(200)</td><td>—</td></tr>
+                <tr><td>shipped_date</td><td>DATE</td><td>—</td></tr>
+                <tr><td>delivered_date</td><td>DATE</td><td>—</td></tr>
+                <tr><td>shipping_status</td><td>VARCHAR(30)</td><td>—</td></tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<!-- Section 4 — Relationships -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white fw-bold">
+        🔗 Table Relationships
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Relationship</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>categories → products</td><td><span class="badge bg-primary">One to Many</span></td><td>One category has many products</td></tr>
+                <tr><td>customers → orders</td><td><span class="badge bg-primary">One to Many</span></td><td>One customer places many orders</td></tr>
+                <tr><td>orders → order_items</td><td><span class="badge bg-primary">One to Many</span></td><td>One order has many items</td></tr>
+                <tr><td>products → order_items</td><td><span class="badge bg-primary">One to Many</span></td><td>One product appears in many orders</td></tr>
+                <tr><td>products → inventory</td><td><span class="badge bg-success">One to One</span></td><td>Each product has one inventory record</td></tr>
+                <tr><td>orders → payments</td><td><span class="badge bg-success">One to One</span></td><td>Each order has one payment</td></tr>
+                <tr><td>orders → shipping</td><td><span class="badge bg-success">One to One</span></td><td>Each order has one shipping record</td></tr>
+                <tr><td>customers → reviews</td><td><span class="badge bg-primary">One to Many</span></td><td>One customer writes many reviews</td></tr>
+                <tr><td>products → reviews</td><td><span class="badge bg-primary">One to Many</span></td><td>One product receives many reviews</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Section 5 — Normalization -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white fw-bold">
+        📐 Normalization
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card border-success mb-3">
+                    <div class="card-header bg-success text-white fw-bold">
+                        ✅ 1NF — First Normal Form
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>All columns have atomic values</li>
+                            <li>No repeating groups</li>
+                            <li>Each column has a single value</li>
+                            <li>Every table has a primary key</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-primary mb-3">
+                    <div class="card-header bg-primary text-white fw-bold">
+                        ✅ 2NF — Second Normal Form
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Satisfies 1NF</li>
+                            <li>No partial dependencies</li>
+                            <li>All non-key columns depend on full primary key</li>
+                            <li>Separate tables for products and categories</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-warning mb-3">
+                    <div class="card-header bg-warning text-white fw-bold">
+                        ✅ 3NF — Third Normal Form
+                    </div>
+                    <div class="card-body">
+                        <ul>
+                            <li>Satisfies 2NF</li>
+                            <li>No transitive dependencies</li>
+                            <li>Customer info stored only in customers table</li>
+                            <li>Product info stored only in products table</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Section 7 — Key Design Decisions -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white fw-bold">
+        💡 Key Design Decisions
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Decision</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>price stored in order_items separately</td>
+                    <td>Preserves historical price at time of purchase</td>
+                </tr>
+                <tr>
+                    <td>IDENTITY columns for all PKs</td>
+                    <td>Auto-increment prevents duplicate key errors</td>
+                </tr>
+                <tr>
+                    <td>Foreign keys throughout</td>
+                    <td>Enforces referential integrity across tables</td>
+                </tr>
+                <tr>
+                    <td>password stored as SHA-256 hash</td>
+                    <td>Security — plain text passwords never stored</td>
+                </tr>
+                <tr>
+                    <td>role column in customers</td>
+                    <td>Differentiates admin and user access levels</td>
+                </tr>
+                <tr>
+                    <td>Separate shipping table</td>
+                    <td>Tracks delivery independently from orders</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

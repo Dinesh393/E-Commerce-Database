@@ -1,0 +1,116 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Analytics Dashboard</h2>
+
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-white bg-success mb-3">
+            <div class="card-body">
+                <h6>Total Revenue</h6>
+                <h3>₹{{ revenue }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-primary mb-3">
+            <div class="card-body">
+                <h6>Total Customers</h6>
+                <h3>{{ total_customers }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning mb-3">
+            <div class="card-body">
+                <h6>Total Products</h6>
+                <h3>{{ total_products }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-danger mb-3">
+            <div class="card-body">
+                <h6>Total Orders</h6>
+                <h3>{{ total_orders }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Orders by Status</div>
+            <div class="card-body">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Top 5 Products by Sales</div>
+            <div class="card-body">
+                <canvas id="productsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Monthly Revenue Trend</div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Orders by Status - Pie Chart
+    new Chart(document.getElementById('statusChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ order_status_labels|safe }},
+            datasets: [{
+                data: {{ order_status_values|safe }},
+                backgroundColor: ['#28a745','#007bff','#17a2b8','#dc3545','#ffc107']
+            }]
+        }
+    });
+
+    // Top 5 Products - Bar Chart
+    new Chart(document.getElementById('productsChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ top_product_labels|safe }},
+            datasets: [{
+                label: 'Quantity Sold',
+                data: {{ top_product_values|safe }},
+                backgroundColor: '#4f46e5'
+            }]
+        }
+    });
+
+    // Monthly Revenue - Line Chart
+    new Chart(document.getElementById('revenueChart'), {
+        type: 'line',
+        data: {
+            labels: {{ monthly_labels|safe }},
+            datasets: [{
+                label: 'Revenue ($)',
+                data: {{ monthly_values|safe }},
+                borderColor: '#28a745',
+                backgroundColor: 'rgba(40,167,69,0.1)',
+                fill: true,
+                tension: 0.4
+            }]
+        }
+    });
+</script>
+{% endblock %}

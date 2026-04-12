@@ -1,0 +1,35 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Reviews & Ratings</h2>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Review ID</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Rating</th>
+            <th>Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review.0 }}</td>
+            <td>{{ review.1 }}</td>
+            <td>{{ review.2 }}</td>
+            <td>
+                {% if review.3 == 5 %}⭐⭐⭐⭐⭐
+                {% elif review.3 == 4 %}⭐⭐⭐⭐
+                {% elif review.3 == 3 %}⭐⭐⭐
+                {% elif review.3 == 2 %}⭐⭐
+                {% else %}⭐
+                {% endif %}
+                ({{ review.3 }}/5)
+            </td>
+            <td>{{ review.4 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card mt-5">
+            <div class="card-header bg-dark text-white fw-bold">
+                ⭐ Add a Review
+            </div>
+            <div class="card-body">
+                {% for message in messages %}
+                    {% if 'already' in message.tags or 'error' in message.tags %}
+                        <div class="alert alert-danger">{{ message }}</div>
+                    {% else %}
+                        <div class="alert alert-success">{{ message }}</div>
+                    {% endif %}
+                {% endfor %}
+
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label>Select Product</label>
+                        <select name="product_id" class="form-control">
+                            {% for product in products %}
+                                <option value="{{ product.0 }}">{{ product.1 }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Rating</label>
+                        <select name="rating" class="form-control">
+                            <option value="5">⭐⭐⭐⭐⭐ — Excellent</option>
+                            <option value="4">⭐⭐⭐⭐ — Good</option>
+                            <option value="3">⭐⭐⭐ — Average</option>
+                            <option value="2">⭐⭐ — Poor</option>
+                            <option value="1">⭐ — Terrible</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100">
+                        Submit Review
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

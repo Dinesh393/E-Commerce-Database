@@ -1,0 +1,39 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<h2 class="mb-4">Orders</h2>
+<table class="table table-striped table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Order Date</th>
+            <th>Status</th>
+            <th>Total Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.0 }}</td>
+            <td>{{ order.1 }}</td>
+            <td>{{ order.2 }}</td>
+            <td>
+                {% if order.3 == 'Delivered' %}
+                    <span class="badge bg-success">{{ order.3 }}</span>
+                {% elif order.3 == 'Processing' %}
+                    <span class="badge bg-primary">{{ order.3 }}</span>
+                {% elif order.3 == 'Shipped' %}
+                    <span class="badge bg-info">{{ order.3 }}</span>
+                {% elif order.3 == 'Cancelled' %}
+                    <span class="badge bg-danger">{{ order.3 }}</span>
+                {% else %}
+                    <span class="badge bg-warning">{{ order.3 }}</span>
+                {% endif %}
+            </td>
+            <td>₹{{ order.4 }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
