@@ -273,21 +273,27 @@ def add_review(request):
         messages.error(request, 'Please login to add a review!')
         return redirect('login')
 
+    # Prevent admin from accessing review page
+    if request.session.get('customer_role') == 'admin':
+        messages.error(request, 'Admins are not allowed to add reviews.')
+        return redirect('home')
+
     conn = get_connection()
     cursor = conn.cursor()
+
     cursor.execute('SELECT product_id, product_name FROM products')
     products = cursor.fetchall()
 
     if request.method == 'POST':
-        product_id  = request.POST['product_id']
-        rating      = request.POST['rating']
+        product_id = request.POST['product_id']
+        rating = request.POST['rating']
         customer_id = request.session['customer_id']
 
-        # Check if already reviewed
         cursor.execute('''
             SELECT * FROM reviews
             WHERE customer_id = ? AND product_id = ?
         ''', customer_id, product_id)
+
         existing = cursor.fetchone()
 
         if existing:
@@ -299,6 +305,7 @@ def add_review(request):
             INSERT INTO reviews (customer_id, product_id, rating, review_date)
             VALUES (?, ?, ?, GETDATE())
         ''', customer_id, product_id, rating)
+
         conn.commit()
         conn.close()
 
@@ -307,5 +314,6 @@ def add_review(request):
 
     conn.close()
     return render(request, 'store/add_review.html', {'products': products})
+
 def database(request):
     return render(request, 'store/database.html')
