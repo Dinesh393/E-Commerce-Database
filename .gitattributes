@@ -1,1 +1,5 @@
 *.py linguist-detectable=false
+*.html linguist-vendored
+*.css linguist-vendored
+*.js linguist-vendored
+*.sql linguist-detectable
