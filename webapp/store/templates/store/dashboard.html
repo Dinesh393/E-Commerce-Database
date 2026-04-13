@@ -3,6 +3,7 @@
 {% block content %}
 <h2 class="mb-4">Analytics Dashboard</h2>
 
+<!-- Row 1 — 8 Stat Cards -->
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="card text-white bg-success mb-3">
@@ -36,9 +37,42 @@
             </div>
         </div>
     </div>
+    <div class="col-md-3">
+        <div class="card text-white mb-3" style="background-color:#6f42c1;">
+            <div class="card-body">
+                <h6>Avg Order Value</h6>
+                <h3>₹{{ avg_order_value }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white mb-3" style="background-color:#20c997;">
+            <div class="card-body">
+                <h6>Total Reviews</h6>
+                <h3>{{ total_reviews }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white mb-3" style="background-color:#fd7e14;">
+            <div class="card-body">
+                <h6>Low Stock Products</h6>
+                <h3>{{ low_stock_count }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white mb-3" style="background-color:#198754;">
+            <div class="card-body">
+                <h6>Delivered Orders</h6>
+                <h3>{{ delivered_orders }}</h3>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="row">
+<!-- Row 2 — Orders by Status + Top 5 Products -->
+<div class="row mb-4">
     <div class="col-md-6">
         <div class="card mb-4">
             <div class="card-header fw-bold">Orders by Status</div>
@@ -57,7 +91,8 @@
     </div>
 </div>
 
-<div class="row">
+<!-- Row 3 — Monthly Revenue -->
+<div class="row mb-4">
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-header fw-bold">Monthly Revenue Trend</div>
@@ -68,7 +103,45 @@
     </div>
 </div>
 
+<!-- Row 4 — Category Revenue + Payment Methods -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Category-wise Revenue</div>
+            <div class="card-body">
+                <canvas id="categoryChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Payment Method Breakdown</div>
+            <div class="card-body">
+                <canvas id="paymentChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
+<!-- Row 5 — Top Customers + Shipping Status -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Top 5 Customers by Spending</div>
+            <div class="card-body">
+                <canvas id="customersChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header fw-bold">Shipping Status</div>
+            <div class="card-body">
+                <canvas id="shippingChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -79,7 +152,7 @@
             labels: {{ order_status_labels|safe }},
             datasets: [{
                 data: {{ order_status_values|safe }},
-                backgroundColor: ['#28a745','#007bff','#17a2b8','#dc3545','#ffc107']
+                backgroundColor: ['#28a745','#007bff','#17a2b8','#dc3545','#ffc107','#6f42c1']
             }]
         }
     });
@@ -103,12 +176,68 @@
         data: {
             labels: {{ monthly_labels|safe }},
             datasets: [{
-                label: 'Revenue ($)',
+                label: 'Revenue (₹)',
                 data: {{ monthly_values|safe }},
                 borderColor: '#28a745',
                 backgroundColor: 'rgba(40,167,69,0.1)',
                 fill: true,
                 tension: 0.4
+            }]
+        }
+    });
+
+    // Category Revenue - Doughnut Chart
+    new Chart(document.getElementById('categoryChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ category_labels|safe }},
+            datasets: [{
+                data: {{ category_values|safe }},
+                backgroundColor: [
+                    '#4f46e5','#28a745','#dc3545',
+                    '#ffc107','#17a2b8','#fd7e14',
+                    '#6f42c1','#20c997','#e83e8c','#0dcaf0'
+                ]
+            }]
+        }
+    });
+
+    // Payment Methods - Pie Chart
+    new Chart(document.getElementById('paymentChart'), {
+        type: 'pie',
+        data: {
+            labels: {{ payment_labels|safe }},
+            datasets: [{
+                data: {{ payment_values|safe }},
+                backgroundColor: ['#007bff','#28a745','#ffc107','#dc3545','#6f42c1']
+            }]
+        }
+    });
+
+    // Top 5 Customers - Horizontal Bar Chart
+    new Chart(document.getElementById('customersChart'), {
+        type: 'bar',
+        data: {
+            labels: {{ top_customer_labels|safe }},
+            datasets: [{
+                label: 'Total Spent (₹)',
+                data: {{ top_customer_values|safe }},
+                backgroundColor: '#20c997'
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+        }
+    });
+
+    // Shipping Status - Doughnut Chart
+    new Chart(document.getElementById('shippingChart'), {
+        type: 'doughnut',
+        data: {
+            labels: {{ shipping_labels|safe }},
+            datasets: [{
+                data: {{ shipping_values|safe }},
+                backgroundColor: ['#28a745','#007bff','#ffc107','#dc3545']
             }]
         }
     });

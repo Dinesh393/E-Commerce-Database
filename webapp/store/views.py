@@ -4,7 +4,7 @@ from django.shortcuts import render
 def get_connection():
     conn = pyodbc.connect(
         'DRIVER={ODBC Driver 17 for SQL Server};'
-        'SERVER=YOUR SERVER NAME;'
+        'SERVER=HPVICTUS;'
         'DATABASE=ECommerce;'
         'Trusted_Connection=yes;'
     )
@@ -110,6 +110,7 @@ def dashboard(request):
     conn = get_connection()
     cursor = conn.cursor()
 
+    # Existing queries
     cursor.execute('SELECT SUM(total_amount) FROM orders')
     revenue = cursor.fetchone()[0]
 
@@ -122,6 +123,20 @@ def dashboard(request):
     cursor.execute('SELECT COUNT(*) FROM orders')
     total_orders = cursor.fetchone()[0]
 
+    # New stat cards
+    cursor.execute('SELECT ROUND(AVG(total_amount), 2) FROM orders')
+    avg_order_value = cursor.fetchone()[0]
+
+    cursor.execute('SELECT COUNT(*) FROM reviews')
+    total_reviews = cursor.fetchone()[0]
+
+    cursor.execute('SELECT COUNT(*) FROM inventory WHERE stock_quantity < 10')
+    low_stock_count = cursor.fetchone()[0]
+
+    cursor.execute("SELECT COUNT(*) FROM orders WHERE order_status = 'Delivered'")
+    delivered_orders = cursor.fetchone()[0]
+
+    # Existing charts
     cursor.execute('''
         SELECT order_status, COUNT(*)
         FROM orders
@@ -146,27 +161,91 @@ def dashboard(request):
     ''')
     monthly_revenue = cursor.fetchall()
 
-    conn.close()
+    # New charts
+    cursor.execute('''
+        SELECT c.category_name,
+               SUM(oi.price * oi.quantity) AS revenue
+        FROM order_items oi
+        JOIN products p ON oi.product_id = p.product_id
+        JOIN categories c ON p.category_id = c.category_id
+        GROUP BY c.category_name
+        ORDER BY revenue DESC
+    ''')
+    category_revenue = cursor.fetchall()
 
-    order_status_labels = [row[0] for row in order_status]
-    order_status_values = [row[1] for row in order_status]
-    top_product_labels = [row[0] for row in top_products]
-    top_product_values = [int(row[1]) for row in top_products]
-    monthly_labels = [str(row[0]) for row in monthly_revenue]
-    monthly_values = [float(row[1]) for row in monthly_revenue]
+    cursor.execute('''
+        SELECT payment_method, COUNT(*) AS total
+        FROM payments
+        GROUP BY payment_method
+        ORDER BY total DESC
+    ''')
+    payment_methods = cursor.fetchall()
+
+    cursor.execute('''
+        SELECT TOP 5 c.name, SUM(o.total_amount) AS total_spent
+        FROM customers c
+        JOIN orders o ON c.customer_id = o.customer_id
+        GROUP BY c.name
+        ORDER BY total_spent DESC
+    ''')
+    top_customers = cursor.fetchall()
+
+    cursor.execute('''
+        SELECT shipping_status, COUNT(*) AS total
+        FROM shipping
+        GROUP BY shipping_status
+    ''')
+    shipping_status = cursor.fetchall()
+
+    # Recent 5 orders
+    cursor.execute('''
+        SELECT TOP 5 o.order_id, c.name,
+               o.order_date, o.order_status, o.total_amount
+        FROM orders o
+        JOIN customers c ON o.customer_id = c.customer_id
+        ORDER BY o.order_date DESC
+    ''')
+    recent_orders = cursor.fetchall()
+
+    # Low stock products
+    cursor.execute('''
+        SELECT TOP 5 p.product_name, i.stock_quantity
+        FROM inventory i
+        JOIN products p ON i.product_id = p.product_id
+        WHERE i.stock_quantity < 10
+        ORDER BY i.stock_quantity ASC
+    ''')
+    low_stock = cursor.fetchall()
+
+    conn.close()
 
     return render(request, 'store/dashboard.html', {
         'revenue': revenue,
         'total_customers': total_customers,
         'total_products': total_products,
         'total_orders': total_orders,
-        'order_status_labels': order_status_labels,
-        'order_status_values': order_status_values,
-        'top_product_labels': top_product_labels,
-        'top_product_values': top_product_values,
-        'monthly_labels': monthly_labels,
-        'monthly_values': monthly_values,
+        'avg_order_value': avg_order_value,
+        'total_reviews': total_reviews,
+        'low_stock_count': low_stock_count,
+        'delivered_orders': delivered_orders,
+        'order_status_labels': [row[0] for row in order_status],
+        'order_status_values': [row[1] for row in order_status],
+        'top_product_labels': [row[0] for row in top_products],
+        'top_product_values': [int(row[1]) for row in top_products],
+        'monthly_labels': [str(row[0]) for row in monthly_revenue],
+        'monthly_values': [float(row[1]) for row in monthly_revenue],
+        'category_labels': [row[0] for row in category_revenue],
+        'category_values': [float(row[1]) for row in category_revenue],
+        'payment_labels': [row[0] for row in payment_methods],
+        'payment_values': [row[1] for row in payment_methods],
+        'top_customer_labels': [row[0] for row in top_customers],
+        'top_customer_values': [float(row[1]) for row in top_customers],
+        'shipping_labels': [row[0] for row in shipping_status],
+        'shipping_values': [row[1] for row in shipping_status],
+        'low_stock': low_stock,
     })
+
+
 from django.contrib import messages
 from django.shortcuts import redirect
 import hashlib
