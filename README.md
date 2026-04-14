@@ -359,8 +359,327 @@ FROM inventory;
 - **SQL Server Management Studio (SSMS)**
 - **GitHub**
 
+
+
+
+---
+# 🛒 MycartDB — E-Commerce Database & Web Application
+
+A full-stack e-commerce management system built using **Microsoft SQL Server** for the database and **Django (Python)** for the web application. This project covers complete database design, normalization, SQL analysis queries, and a fully functional web app with role-based authentication.
+
 ---
 
-## Author
+## 🛠️ Tech Stack
 
-**Dinesh**
+![Python](https://img.shields.io/badge/Python-3.13-blue?logo=python)
+![Django](https://img.shields.io/badge/Django-6.0.4-green?logo=django)
+![SQL Server](https://img.shields.io/badge/Microsoft%20SQL%20Server-2019-red?logo=microsoftsqlserver)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple?logo=bootstrap)
+![Chart.js](https://img.shields.io/badge/Chart.js-4.x-orange?logo=chartdotjs)
+![GitHub](https://img.shields.io/badge/GitHub-Version%20Control-black?logo=github)
+
+---
+
+## 📌 Project Overview
+
+| Property | Details |
+|---|---|
+| Database | ECommerce (Microsoft SQL Server) |
+| Backend | Python — Django 6.0.4 |
+| Frontend | HTML, CSS, Bootstrap 5 |
+| DB Connector | pyodbc + mssql-django |
+| Total Tables | 9 |
+| Total Columns | 43 |
+| Total Records | 200+ Orders, 100+ Customers, 50+ Products |
+| Authentication | Role-based (Admin / User) |
+
+---
+
+## 🌐 Web Application Screenshots
+
+### 🏠 Home Page
+> Summary cards showing live data from SQL Server — Total Revenue, Customers, Products and Orders.
+
+![Home](screenshots/home.png)
+
+---
+
+### 📦 Products Page
+> All products fetched directly from the SQL Server `products` table with category and price.
+
+![Products](screenshots/products.png)
+
+---
+
+### 👥 Customers Page
+> All registered customers from the `customers` table with complete details.
+
+![Customers](screenshots/customers.png)
+
+---
+
+### 📋 Orders Page
+> All orders with colour-coded status badges — Delivered, Processing, Shipped, Pending, Cancelled.
+
+![Orders](screenshots/orders.png)
+
+---
+
+### 🗃️ Inventory Page
+> Stock levels for all products with Out of Stock / In Stock badges.
+
+![Inventory](screenshots/inventory.png)
+
+---
+
+### 💳 Payments Page
+> Payment records with method, status badges (Completed, Failed, Refunded) and amounts in ₹.
+
+![Payments](screenshots/payments.png)
+
+---
+
+### ⭐ Reviews & Ratings Page
+> Customer reviews with star ratings displayed for all products.
+
+![Reviews](screenshots/reviews.png)
+
+---
+
+### 📊 Analytics Dashboard
+> Live analytics dashboard powered by SQL queries and Chart.js visualizations.
+
+**Dashboard — Stat Cards + Charts**
+![Dashboard 1](screenshots/dashboard_1.png)
+
+**Dashboard — Monthly Revenue + Category & Payment Charts**
+![Dashboard 2](screenshots/dashboard_2.png)
+
+**Dashboard — Top Customers + Shipping Status**
+![Dashboard 3](screenshots/dashboard_3.png)
+
+---
+
+### 🗄️ Database Info Page
+> Dedicated page showing ER Diagram, table structure, normalization, relationships and SQL queries.
+
+**Database Overview & ER Diagram**
+![Database 1](screenshots/database_1.png)
+
+**Relationships, Normalization & Key Design Decisions**
+![Database 2](screenshots/database_2.png)
+
+---
+
+### 🔐 Authentication
+
+**Signup Page** — Register as Admin or User
+![Signup](screenshots/signup.png)
+
+**Login Page** — Role-based login (Admin / User)
+![Login](screenshots/login.png)
+
+---
+
+### 👑 Admin vs 👤 User Access
+
+**Admin View** — Add Product button visible in navbar
+![Admin Navbar](screenshots/admin_navbar.png)
+
+**User View** — No Add Product button
+![User Navbar](screenshots/user_navbar.png)
+
+---
+
+### ➕ Admin — Add Product
+> Admin can add new products directly from the website. Data saves instantly to SQL Server.
+
+![Add Product](screenshots/add_product.png)
+
+---
+
+### ⭐ User — Add Review
+> Logged-in users can submit star ratings for products. Saves to the `reviews` table.
+
+![Add Review](screenshots/add_review.png)
+
+---
+
+## 🗂️ Database Schema
+
+### Tables Overview
+
+| Table | Purpose | Key Columns |
+|---|---|---|
+| `categories` | Product categories | category_id, category_name |
+| `products` | Product catalog | product_id, product_name, category_id, price |
+| `customers` | Customer info | customer_id, name, email, password, role |
+| `orders` | Order records | order_id, customer_id, order_status, total_amount |
+| `order_items` | Order line items | order_item_id, order_id, product_id, price, quantity |
+| `inventory` | Stock levels | inventory_id, product_id, stock_quantity |
+| `payments` | Payment records | payment_id, order_id, payment_method, payment_status |
+| `reviews` | Product ratings | review_id, customer_id, product_id, rating |
+| `shipping` | Delivery tracking | shipping_id, order_id, shipped_date, delivered_date |
+
+### Relationships
+
+| Relationship | Type |
+|---|---|
+| categories → products | One-to-Many |
+| customers → orders | One-to-Many |
+| orders → order_items | One-to-Many |
+| products → order_items | One-to-Many |
+| products → inventory | One-to-One |
+| orders → payments | One-to-One |
+| orders → shipping | One-to-One |
+| customers → reviews | One-to-Many |
+| products → reviews | One-to-Many |
+
+---
+
+## 📐 Normalization
+
+- **1NF** — All columns have atomic values, no repeating groups, every table has a primary key
+- **2NF** — No partial dependencies, separate tables for products and categories
+- **3NF** — No transitive dependencies, customer info stored only in customers table
+
+---
+
+---
+
+## 🔐 Role-Based Authentication
+
+| Feature | Admin | User |
+|---|---|---|
+| View all pages | ✅ | ✅ |
+| Signup / Login | ✅ | ✅ |
+| Add Product | ✅ | ❌ |
+| Add Review | ✅ | ✅ |
+| View Dashboard | ✅ | ✅ |
+
+---
+
+## 🚀 How to Run Locally
+
+### Prerequisites
+- Python 3.13+
+- Microsoft SQL Server
+- SSMS (SQL Server Management Studio)
+- ODBC Driver 17 for SQL Server
+
+### Step 1 — Set up the Database
+
+Run scripts in this order in SSMS:
+
+```
+1. sql/create_tables/create_database.sql
+2. sql/create_tables/create_categories_table.sql
+3. sql/create_tables/create_customers_table.sql
+4. sql/create_tables/create_products_table.sql
+5. sql/create_tables/create_orders_table.sql
+6. sql/create_tables/create_order_items_table.sql
+7. sql/create_tables/create_inventory_table.sql
+8. sql/create_tables/create_payments_table.sql
+9. sql/create_tables/create_shipping_table.sql
+10. sql/create_tables/create_reviews_table.sql
+```
+
+### Step 2 — Insert Sample Data
+
+```
+1. sql/insert_data/insert_categories.sql
+2. sql/insert_data/insert_customers.sql
+3. sql/insert_data/insert_products.sql
+4. sql/insert_data/insert_orders.sql
+5. sql/insert_data/insert_order_items.sql
+6. sql/insert_data/insert_inventory.sql
+```
+
+### Step 3 — Set Up Web App
+
+```bash
+cd webapp
+pip install django pyodbc mssql-django
+```
+
+Update `webapp/ecommerce/settings.py`:
+
+```python
+DATABASES = {
+    'default': {
+        'ENGINE': 'mssql',
+        'NAME': 'ECommerce',
+        'HOST': 'YOUR_SERVER_NAME',
+        'PORT': '',
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+            'trusted_connection': 'yes',
+        },
+    }
+}
+```
+
+### Step 4 — Run the App
+
+```bash
+py -3.13 manage.py migrate
+py -3.13 manage.py runserver
+```
+
+Open browser: `http://127.0.0.1:8000`
+
+---
+
+## 📁 File Structure
+
+```
+E-Commerce-Database/
+│
+├── sql/
+│   ├── create_tables/          ← All table creation scripts
+│   ├── insert_data/            ← Sample data scripts
+│   └── analysis/               ← SQL analysis queries
+│
+├── webapp/                     ← Django web application
+│   ├── ecommerce/
+│   │   ├── settings.py
+│   │   └── urls.py
+│   ├── store/
+│   │   ├── views.py
+│   │   ├── urls.py
+│   │   └── templates/store/
+│   ├── static/
+│   └── manage.py
+│
+├── screenshots/                ← All page screenshots
+├── scripts/
+│   └── generate_data.py        ← Python Faker data generator
+├── ER_Diagram.png
+├── .gitignore
+└── README.md
+```
+
+---
+
+
+## 🛠️ Tools Used
+
+- **Microsoft SQL Server** — Database
+- **SQL Server Management Studio (SSMS)** — DB Management
+- **Python 3.13 + Django 6.0.4** — Backend
+- **Bootstrap 5** — Frontend Styling
+- **Chart.js** — Dashboard Charts
+- **pyodbc + mssql-django** — DB Connector
+- **VS Code** — Code Editor
+- **GitHub** — Version Control
+
+---
+
+## 👨‍💻 Author
+
+**Paloju Dinesh**
+- GitHub: [@Dinesh393](https://github.com/Dinesh393)
+
+---
+
+> ⭐ If you found this project helpful, consider giving it a star on GitHub!
